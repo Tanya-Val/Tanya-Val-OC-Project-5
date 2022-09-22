@@ -20,4 +20,7 @@ app.use(express.json());
 
 app.use('/api/products', productRoutes);
 
+//the line 
+app.use(express.static('front'));
+
 module.exports = app;
