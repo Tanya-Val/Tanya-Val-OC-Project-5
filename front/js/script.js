@@ -2,16 +2,19 @@
 fetch('http://localhost:3000/api/products/')
         .then(res => res.json())
         .then(data => {
-                //console.log(data);
+                console.log(data);
                 displayProducts(data);
         })
 
-const productItems = document.getElementById('items');
-const itemsListLength = itemList.length;
 
-function displayProducts(itemList) {
-        for (let i = 0; i < itemList.length; i++) {
-                let productForm = `
+
+//
+//Milestone #3: Inserting the products into the homepage
+function displayProducts(itemList) { 
+        let productDisplay = document.querySelector("#items")
+        
+        for (let i in itemList) {
+                productDisplay.innerHTML += `
                 <a href="./product.html?id=${itemList[i]._id}">
                 <article>
                 <img src="${itemList[i].imageUrl}" alt="${itemList[i].altTxt}">
@@ -20,7 +23,5 @@ function displayProducts(itemList) {
                 </article>
                 </a>
                 `
-                console.log(itemList[i]);
-                items.insertAdjacentHTML('beforeend', productForm)
         }
 }
