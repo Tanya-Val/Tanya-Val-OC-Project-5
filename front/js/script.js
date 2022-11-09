@@ -7,8 +7,6 @@ fetch('http://localhost:3000/api/products/')
         })
 
 
-
-//
 //Milestone #3: Inserting the products into the homepage
 function displayProducts(itemList) { 
         let productDisplay = document.querySelector("#items")

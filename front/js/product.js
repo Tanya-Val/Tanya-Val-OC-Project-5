@@ -1,121 +1,127 @@
-//https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams/URLSearchParams
-
 //-----------------------------------------------------
-//Milestone #4: Making links between the products on the homepage and on the product page
+//------Milestone #4: Making links between the products on the homepage and on the product page
 //Prints the entire href
 const url = window.location
+console.log(url);
+
 //Prints the entire parameter string
 const queryString = window.location.search;
-console.log(queryString); 
-const urlParams = new URLSearchParams(queryString); 
-//Milestone #5: Collecting the ID of a product you wish to display
+console.log(queryString);
+
+//------Milestone #5: Collecting the ID of a product you wish to display
+const urlParams = new URLSearchParams(queryString);
+
+//id variable stores the id of the product to be displayed
 const id = urlParams.get("id");
-console.log(id); 
+console.log(id);
 //-----------------------------------------------------
 
-
 //-----------------------------------------------------
-// fetching data on the products from the server
+// fetching data on the products from the server to have acces to the product details
 fetch('http://localhost:3000/api/products/')
-        .then(res => res.json())
-        .then(data => {
-            console.log(data);
-            displayProductsDetails(data);
+  .then(res => res.json())
+  .then(data => {
+    //console.log(data);
+    //call the function to display product details by passing data from server as an argument
+    displayProductDeatils(data);
 
-        })
+
+  });
 //-----------------------------------------------------
 
+//-----------------------------------------------------
+//-------Milestone #6: Inserting a product and its details into a product page
 
-//Milestone #6: Inserting a product and its details into a product page
-function displayProductsDetails (productData) {
-    let productImage = document.querySelector(".item__img");
-    let productTitle = document.querySelector("#title");
-    let productPrice = document.querySelector("#price");
-    let productDescription = document.querySelector("#description");
-    let productColor = document.querySelector("#colors");
-    //??For each of the products from the homepage you will have to set up the “a” tag and the “href” property.
-    for (product of productData){
-        if (id === product._id) {
-            productImage.innerHTML = `<img src=${product.imageUrl} alt=${product.altTxt}>`
-            productTitle.textContent = `${product.name}`;
-            productPrice.textContent = `${product.price}`;
-            productDescription.textContent = `${product.description}`;
-            //Color option
-            for (let color of product.colors){
-                productColor.innerHTML += `<option value=${color}>${color}</option>`
-            }
-        }
+//Declaring the variables to manipulate the DOM 
+const productImage = document.querySelector(".item__img");
+const productName = document.querySelector("#title");
+const productPrice = document.querySelector("#price");
+const productDescription = document.querySelector("#description");
+const productColor = document.querySelector("#colors");
+let productQuantity = document.querySelector("#quantity")
+
+
+let imageUrl = "";
+let altTxt = "";
+
+//Function to display product details
+function displayProductDeatils(productDataFromServer) {
+  //DOM manipulation to display product details
+  //for loop to iterate through data from server to display product details
+  for (product of productDataFromServer) {
+    if (id === product._id) {
+      productImage.innerHTML = `<img src="${product.imageUrl}" alt="${product.altTxt}">`;
+      productName.textContent = `${product.name}`;
+      productPrice.textContent = `${product.price}`;
+      productDescription.textContent = `${product.description}`;
+
+      //variables to hold the values for local storage
+      imageUrl = product.imageUrl;
+      altTxt = product.altTxt;
+
+      //for loop to iterate through array of color from server
+      for (let color of product.colors) {
+        productColor.innerHTML += `<option value=${color}>${color}</option>`
+      };
+    };
+  };
+};
+
+let cartArray = [];
+let cart = localStorage.setItem('cart', JSON.stringify(cartArray));
+let cartParse = JSON.parse(localStorage.getItem('cart'));
+
+
+
+const addToCartFunction = function addProductToCart() {
+  console.log("button pressed")
+  let productInfo = {
+    id: id,
+    name: productName.textContent,
+    price: productPrice.textContent,
+    color: productColor.value,
+    quantity: productQuantity.value,
+    description: productDescription.textContent,
+    imageUrl: product.imageUrl,
+    altTxt: product.altTxt,
+  };
+
+ 
+  let push = true;
+  if (productQuantity.value == 0 || productColor.value == undefined) {
+    console.log('add detales'); //add alert message
+  } else {
+    if (cartParse) {
+      cartParse.forEach(function (product, key) {
+        if (product.id == id &&
+          product.color == productColor.value) {
+          cartParse[key].quantity = parseInt(product.quantity) +
+            parseInt(productQuantity.value);
+          push = false;
+          cart = localStorage.setItem('cart', JSON.stringify(cartParse));
+          cartParse = JSON.parse(localStorage.getItem('cart'));
+        };
+      });
+    };
+
+    if (push) {
+      cartParse.push(productInfo);
+
+      cart = JSON.stringify(cartParse);
+      localStorage.setItem('cart', cart);
+      cartParse = JSON.parse(cart);
     }
-}
-
-//ADD to Cart Button 
-//const productQuantity = document.querySelector("#quantity");
-//console.log(productQuantity);
-
-//const cartArray = {}
+  };
+};
 
 
-////////
-//Getting HTML values from HTML
-/////////
-// Getting the quantity 
-function productQuantityValue() {
-    let productQuantity = document.getElementById("quantity").value;
-    return productQuantity;
-  }
-  
-  // Getting the color
-  function productColorValue() {
-    let productColor = document.getElementById("colors").value;
-    return productColor;
-  }
-  
-  // HTML element : button add to cart
-  const cartButton = document.getElementById("addToCart");
-  
-  // at button press : toCartBtn, function addCart that activates the 2 other function by click
-  cartButton.addEventListener("click", () => {
-    let productQuantity = parseInt(productQuantityValue());
-    let productColor = productColorValue();
-    productAddToCart(id, productColor, productQuantity);
-    
-  });
+//console.log(productName.textContent); //works!
+//console.log(productPrice.textContent); //works!
+//console.log(productColor.value); //works!
+//console.log(id); //works!
+//console.log(productQuantity.value) //works!
 
-
-  //checking if the cart has something 
-  function getCart() {
-    let items = []; 
-    if (localStorage.getItem("cart") != null) {
-      items = JSON.parse(localStorage.getItem("cart"));
-    }
-    return items;
-  }
-  
-  function productAddToCart(productId, productColor, productQuantity) {
-    if (productQuantity <= 0 || productColor == "") {
-      console.log("warning!"); //!!!!!!to add a warning popup with the message
-      return;
-    }
-    let items = getCart();
-    if (items.length == 0) {
-      items = [{
-        id: productId, 
-        color: productColor, 
-        quantity: productQuantity}];
-    } else {
-      let exist = false;
-      for (let i = 0; i < items.length; i++) {
-        if (productId === items[i][0] && productColor === items[i][1]) {
-          exist = true;
-          items[i][2] += productQuantity;
-        }
-      }
-      if (!exist) {
-          items.push({
-          id: productId, 
-          color: productColor, 
-          quantity: productQuantity});
-      }
-    }
-    localStorage.setItem("cart", JSON.stringify(items));
-  }
+//event listener to the Add button
+const addToCartButton = document.getElementById('addToCart');
+//console.log(addToCartButton);
+addToCartButton.addEventListener('click', addToCartFunction);
