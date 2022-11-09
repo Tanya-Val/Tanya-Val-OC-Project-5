@@ -67,15 +67,14 @@ function displayProductDeatils(productDataFromServer) {
   };
 };
 
-let cartArray = [];
-let cart = localStorage.setItem('cart', JSON.stringify(cartArray));
-let cartParse = JSON.parse(localStorage.getItem('cart'));
-
-
 
 const addToCartFunction = function addProductToCart() {
   console.log("button pressed")
-  let productInfo = {
+  if(!localStorage.getItem('cart')){
+    localStorage.setItem('cart','[]')
+  };
+
+   let productInfo = {
     id: id,
     name: productName.textContent,
     price: productPrice.textContent,
@@ -86,7 +85,10 @@ const addToCartFunction = function addProductToCart() {
     altTxt: product.altTxt,
   };
 
- 
+  //everithing id dtoreg in the shoping cart in local storage
+  let cartParse = JSON.parse(localStorage.getItem('cart'));
+
+
   let push = true;
   if (productQuantity.value == 0 || productColor.value == undefined) {
     console.log('add detales'); //add alert message
@@ -111,7 +113,7 @@ const addToCartFunction = function addProductToCart() {
       localStorage.setItem('cart', cart);
       cartParse = JSON.parse(cart);
     }
-  };
+  }; 
 };
 
 
