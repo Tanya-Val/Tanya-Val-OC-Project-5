@@ -41,9 +41,6 @@ const productColor = document.querySelector("#colors");
 let productQuantity = document.querySelector("#quantity")
 
 
-let imageUrl = "";
-let altTxt = "";
-
 //Function to display product details
 function displayProductDeatils(productDataFromServer) {
   //DOM manipulation to display product details
@@ -54,10 +51,6 @@ function displayProductDeatils(productDataFromServer) {
       productName.textContent = `${product.name}`;
       productPrice.textContent = `${product.price}`;
       productDescription.textContent = `${product.description}`;
-
-      //variables to hold the values for local storage
-      imageUrl = product.imageUrl;
-      altTxt = product.altTxt;
 
       //for loop to iterate through array of color from server
       for (let color of product.colors) {
@@ -77,7 +70,7 @@ const addToCartFunction = function addProductToCart() {
    let productInfo = {
     id: id,
     name: productName.textContent,
-    price: productPrice.textContent,
+    //price: productPrice.textContent,
     color: productColor.value,
     quantity: productQuantity.value,
     description: productDescription.textContent,
