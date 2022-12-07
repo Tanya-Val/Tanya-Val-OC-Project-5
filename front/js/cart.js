@@ -45,7 +45,7 @@ function displayCart(dataFromApi) {
 
   changeQuantity();
   deleteProduct();
-  
+
 }
 
 
@@ -160,7 +160,7 @@ function deleteProduct() {
   const deleteProduct = document.querySelectorAll('.deleteItem');
 
   console.log(typeof deleteProduct)
- 
+
   for (let productOnpage of deleteProduct) {
 
     productOnpage.addEventListener('click', (event) => {
@@ -169,32 +169,126 @@ function deleteProduct() {
 
       //event.preventDefault();
 
-       for (product in cartParse) {
+      for (product in cartParse) {
         if (product.id === productOnpage.dataset.id && product.color === productOnpage.dataset.color) {
 
           console.log(product.id);
-          cartParse.splice(product,1);
+          cartParse.splice(product, 1);
           localStorage.cart = JSON.stringify(cartParse);
           return location.reload();
         };
-      } ; 
+      };
 
-    }); 
+    });
 
   }
 }
-  
+
+
+const orderBnt = document.getElementById('order');
+const firstName = document.getElementById('firstName');
+const lastName = document.getElementById('lastName');
+const address = document.getElementById('address');
+const city = document.getElementById('city');
+const email = document.getElementById('email');
+
+orderBnt.addEventListener('click', (event) => {
+  event.preventDefault();
+
+  console.log('button works')
+
+  formValidation();
+
+})
+
+function formValidation() {
+  //get values from the inputs
+  //trim() - delete extra space
+  const firstNameValue = firstName.value.trim()
+  const lastNameValue = lastName.value.trim()
+  const addressValue = address.value.trim()
+  const cityValue = city.value.trim()
+  const emailValue = email.value.trim()
+
+
+  const firstNameErrorMsg = document.getElementById("firstNameErrorMsg");
+const lastNameErrorMsg = document.getElementById('lastNameErrorMsg');
+const addressErrorMsg = document.getElementById('addressErrorMsg');
+const cityErrorMsg = document.getElementById('cityErrorMsg');
+const emailErrorMsg = document.getElementById('emailErrorMsg');
+
+  const contactObj = {
+    firstName: firstName.value.trim(),
+    lastName: lastName.value.trim(),
+    address: address.value.trim(),
+    city: city.value.trim(),
+    email: email.value.trim()
+  }
+
+  function validateFirstName() {
+    //let letters = /[a-zA-Z\s]+$/;
+    if (/[a-zA-Z\s]+$/.test(firstNameValue)) {
+      firstNameErrorMsg.innerHTML = " ";
+      return true;
+    } else {
+      firstNameErrorMsg.innerHTML = "Add valid first name";
+      return false;
+    }
+  }
+  validateFirstName();
+
+
+ function validateLastName() {
+    if (/[a-zA-Z\s]+$/.test(lastNameValue)) {
+      lastNameErrorMsg.innerHTML = " ";
+      return true;
+    } else {
+      lastNameErrorMsg.innerHTML = "Add valid last name";
+    }
+  }
+  validateLastName() 
+
+  function validateAddress() {
+    
+    if (/\d{2}[ ]?\d{3}$/.test(addressValue)) {
+      addressErrorMsg.innerHTML = " ";
+      return true;
+    } else {
+      addressErrorMsg.innerHTML = "Add valid address";
+    }
+  }
+  validateAddress() 
+
+  function validateCity() {
+    
+    if (/[a-zA-Z\s]+$/.test(cityValue)) {
+      cityErrorMsg.innerHTML = " ";
+      return true;
+    } else {
+      cityErrorMsg.innerHTML = "Add valid address";
+    }
+  }
+  validateCity() 
+
+  function validateEmail() {
+    
+    if (/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/.test(emailValue)) {
+      emailErrorMsg.innerHTML = " ";
+      return true;
+    } else {
+      emailErrorMsg.innerHTML = "Add valid address";
+    }
+  }
+  validateEmail()
+}
 
 
 
+
+
+//(\d{1,}) [a-zA-Z0-9\s]+(\.)? [a-zA-Z]+(\,)? [A-Z]{2} [0-9]{5,6}
 
 /*
-
-
-
-
-
-
 //--------------form check
 function postForm() {
   const order = document.getElementById('order');
