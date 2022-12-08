@@ -196,6 +196,7 @@ orderBnt.addEventListener('click', (event) => {
   formValidation();
   validControl();
   productTable();
+  contactObjInit();
 
 })
 
@@ -206,7 +207,7 @@ orderBnt.addEventListener('click', (event) => {
 
 
 
-const contactObj = {
+let contactObj = {
   firstName: firstName.value.trim(),
   lastName: lastName.value.trim(),
   address: address.value.trim(),
@@ -289,8 +290,7 @@ function validateEmail() {
 
 function validControl() {
   if (validateFirstName() && validateLastName() && validateCity() && validateAddress() && validateEmail() === true) {
-    localStorage.setItem('contactObj', JSON.stringify(contactObj));
-    console.log('check passed');
+
     return true;
   } else {
     alert('Please, check the validity of entered data')
@@ -304,6 +304,22 @@ function formValidation() {
   validateCity()
   validateEmail()
 };
+
+function contactObjInit() {
+  if (validControl()=== true){
+    contactObj = {
+      firstName: firstName.value.trim(),
+      lastName: lastName.value.trim(),
+      address: address.value.trim(),
+      city: city.value.trim(),
+      email: email.value.trim()
+    }
+
+    localStorage.setItem('contactObj', JSON.stringify(contactObj));
+    console.log('check passed');
+  }
+}
+  
 
 
 let cartParseObj = JSON.parse(localStorage.getItem('contactObj'));
