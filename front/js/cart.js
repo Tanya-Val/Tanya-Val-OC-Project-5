@@ -195,9 +195,10 @@ orderBnt.addEventListener('click', (event) => {
 
   formValidation();
   validControl();
-  productTable();
+  
   contactObjInit();
 
+  postRequest ();
 })
 
 //get values from the inputs
@@ -306,7 +307,7 @@ function formValidation() {
 };
 
 function contactObjInit() {
-  if (validControl()=== true){
+  if (validControl() === true){
     contactObj = {
       firstName: firstName.value.trim(),
       lastName: lastName.value.trim(),
@@ -322,23 +323,31 @@ function contactObjInit() {
   
 
 
-let cartParseObj = JSON.parse(localStorage.getItem('contactObj'));
-console.log(cartParseObj);
+//let cartParseObj = JSON.parse(localStorage.getItem('contactObj'));
+//console.log(cartParseObj);
 
-let productIdTable = [];
-
+const productIdTable = [];
 function productTable() {
+  
   let cartParse = JSON.parse(localStorage.getItem("cart"));
   console.log(cartParse)
   for (product of cartParse) {
-    console.log(product.id)
+    //console.log(product.id)
     productIdTable.push(product.id);
   }
   console.log(productIdTable);
 }
 
 
+function postRequest (){
+  productTable()
+  contactObjInit()
 
+  console.log(contactObj);
+  console.log(productIdTable);
+
+
+}
 
 
 //vvvvv
