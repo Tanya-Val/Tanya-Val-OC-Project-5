@@ -23,14 +23,14 @@ A “product” page which will (dynamically) display the details of the product
 
 A “cart” page. This page will contain several parts:
     
-    - A summary of the products in the cart and the total price. Users should be
+    -A summary of the products in the cart and the total price. Users should be
 able to change the quantity of product or to completely remove a product from
 the cart
     
-    - A form to be submitted in order to confirm the order. The data entered into
+    -A form to be submitted in order to confirm the order. The data entered into
 this form should be correct and properly formatted before it is sent to the back
 end, for example there should be no numbers in the name field.
 
 A “confirmation” page:
    
-   - An order confirmation message thanking the user for their order and displaying the order number sent by the API
+   -An order confirmation message thanking the user for their order and displaying the order number sent by the API
