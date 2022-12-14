@@ -2,7 +2,7 @@
 
 This is the front end and back end server for Project 5 of the Web Developer path.
 
-### Back end Prerequisites ###
+### Back end Prerequisites (Provided with the project)###
 
 You will need to have Node and `npm` installed locally on your machine.
 
@@ -33,3 +33,7 @@ A “cart” page. This page will contain several parts:
 A “confirmation” page:
    
    -An order confirmation message thanking the user for their order and displaying the order number sent by the API
+   
+
+
+###On this project, you should only use Vanilla JavaScript code (pure JavaScript). The use of any JavaScript libraries or frameworks (such as React, Angular, Vue or jQuery) is prohibited for this project.
