@@ -3,7 +3,7 @@
 fetch('http://localhost:3000/api/products/')
         .then(res => res.json())
         .then(data => {
-                //Uncomment next line to print the data from API
+                //Uncomment the following to print the data from API
                 //console.log(data);
 
                 //The function displays product details from API on the home page using DOM
@@ -17,8 +17,10 @@ fetch('http://localhost:3000/api/products/')
 //Function is called in the fetch() method with data from API as an argument.
 //Data is passed through the "for" loop to display product details on the home page using DOM
 function displayProducts(itemList) { 
-        let productDisplay = document.querySelector("#items")
-        
+        //Declaring a variable to manipulate the DOM
+        const productDisplay = document.querySelector("#items")
+        //DOM manipulation to display product details
+        //for loop to iterate through data from server to display product details
         for (let i in itemList) {
                 productDisplay.innerHTML += `
                 <a href="./product.html?id=${itemList[i]._id}">
