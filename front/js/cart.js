@@ -226,26 +226,31 @@ function changeQuantity() {
   };
 };
 
-
+//Function deletes the product from the page and local storage
+//Function activated by clicking on the 'delete' button
 function deleteProduct() {
+
+  ////Selecting the 'delete' button class
   const deleteProduct = document.querySelectorAll('.deleteItem');
 
-  //console.log(typeof deleteProduct)
+  //The 'for' loop iterated through the product on the web page
+  for (let productDelete of deleteProduct) {
 
-  for (let product of deleteProduct) {
-
-    product.addEventListener('click', (event) => {
-      //console.log('buton pressed');
-      
-
+    //Adding event listener to the 'delete' button
+    productDelete.addEventListener('click', (event) => {
       event.preventDefault();
 
+      //The 'for' loop iterated through all products in local storage
       for (product in cartParse) {
-        if (product.id === product.dataset.id && product.color === product.dataset.color) {
 
-          console.log(product.id);
-          
+        //Check if product id and color of which 'detele' button is pressed,
+        //equals to id and color of a product from local storage
+        if (product.id === productDelete.dataset.id && product.color === productDelete.dataset.color) {
+
+          //Delete the product object from the array of products
           cartParse.splice(product, 1);
+
+          //Update the local storage and reload the page
           localStorage.cart = JSON.stringify(cartParse);
           return location.reload();
         };
@@ -254,44 +259,41 @@ function deleteProduct() {
   };
 };
 
+//-----Milestone #10: Confirming the order-----
 
-
-
-
-
-
-
+//Selecting the 'order' button class and adding an event listener
+//When the button pressed, the function to validate the form and post the request will be called
 const orderBnt = document.getElementById('order');
 orderBnt.addEventListener('click', (event) => {
-
   event.preventDefault();
 
-  console.log('button works')
-
+  //'if' statement checks if valitadion is true (form complited without errors)
   if (validControl()) {
+
+    //If the form is validated, 
+    //The contact object, that stored data from the form is created
     contactObjInit();
+    
+    //Calling the post request function
     postRequest();
   } else {
+
+    //If the form is not validated, check the data one more time
     formValidation();
-  }
+  };
+});
 
-})
-
-//get values from the inputs
-//trim() - delete extra space
-
-
-
-
-
+//Creating the contact object that will store data from the validation form
 let contactObj = {
   firstName: firstName.value.trim(),
   lastName: lastName.value.trim(),
   address: address.value.trim(),
   city: city.value.trim(),
   email: email.value.trim()
-}
+};
 
+//Validation functions for the form,
+//displays an error message if the introduced data is not valid 
 function validateFirstName() {
   const firstName = document.getElementById('firstName');
   const firstNameValue = firstName.value.trim()
@@ -332,7 +334,7 @@ function validateAddress() {
     return true;
   } else {
 
-    addressErrorMsg.innerHTML = "Add valid address";
+    addressErrorMsg.innerHTML = "Add valid address -> Nr. Street ZIP code XXXXX";
   }
 };
 
@@ -361,18 +363,11 @@ function validateEmail() {
     return true;
   } else {
 
-    emailErrorMsg.innerHTML = "Add valid address";
+    emailErrorMsg.innerHTML = "Add valid email address -> example@example.com";
   }
-}
+};
 
-function validControl() {
-  if (validateFirstName() && validateLastName() && validateCity() && validateAddress() && validateEmail()) {
-    return true;
-  } else {
-    return false;
-  }
-}
-
+//Function that calls all the validation functions for each field in the form
 function formValidation() {
   validateFirstName();
   validateLastName()
@@ -381,8 +376,23 @@ function formValidation() {
   validateEmail()
 };
 
+//Function checks if all fields in the form are completed without errors
+function validControl() {
+  if (validateFirstName() && validateLastName() && validateCity() && validateAddress() && validateEmail()) {
+    return true;
+  } else {
+    return false;
+  };
+};
+
+//Function that updates the contact object with data introduced in the form,
+//and stores it in local storage
 function contactObjInit() {
+
+  //'if' statement checks if the form passed the validation
   if (validControl()) {
+
+    //Updating the contact object with data from the form 
     contactObj = {
       firstName: firstName.value.trim(),
       lastName: lastName.value.trim(),
@@ -391,29 +401,35 @@ function contactObjInit() {
       email: email.value.trim()
     }
 
+    //Setting the contact object in local storage
     localStorage.setItem('contactObj', JSON.stringify(contactObj));
-    console.log('check passed');
-  }
-}
+    //console.log('check passed');
+  };
+};
 
 
-
-//let cartParseObj = JSON.parse(localStorage.getItem('contactObj'));
-//console.log(cartParseObj);
-
+//Declaring a variable that will store the list of products id from the local storage
 const productIdTable = [];
 
+//Function pushes the list of products id from local storage to the 'productIdTable' array
 function productTable() {
 
+  //Variable that holds parsed data from local storage
   let cartParse = JSON.parse(localStorage.getItem("cart"));
-  console.log(cartParse)
+  
+  //the 'for' loop will iterate through each object in the local storage
   for (product of cartParse) {
-    //console.log(product.id)
+    
+    //The id of the products is pushed to the 'productIdTable' array
     productIdTable.push(product.id);
-  }
-  console.log(productIdTable);
-}
+  };
 
+  //Uncomment the following line to print the array
+  //console.log(productIdTable);
+};
+
+
+//Function that generates a random string that will serve as the order id
 //https://tecadmin.net/generate-random-string-in-javascript/
 function genRandonString(length) {
   let chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*-_';
@@ -425,21 +441,28 @@ function genRandonString(length) {
   return result;
 }
 
+//Function that creates a product table that stores the ids of products and contact object,
+//send a post request to API to colect the product ID
 function postRequest() {
-  productTable()
-  contactObjInit()
 
-  console.log(contactObj);
-  console.log(productIdTable);
+  //Calling the function to create the objects
+  productTable();
+  contactObjInit();
 
+  //Uncomment the following line to print contacts from the form and list of ids
+  //console.log(contactObj);
+  //console.log(productIdTable);
+
+  //Creating the object for the POST request 
   const dataToPOST = {
     productIdTable,
     contactObj,
   };
-
+//Uncomment the following line to print the object for POST request
   console.log(dataToPOST);
 
-
+//Fetch method with POST request that will send to API 'dataToPost' object,
+//and generate the order id
   fetch("http://localhost:3000/api/products/order", {
       method: 'POST',
       headers: {
@@ -451,7 +474,6 @@ function postRequest() {
       })
     })
     .then(response => response.json())
-    //.then(response => console.log(JSON.stringify(response)))
     .then((data) => {
       let confirmationUrl = "./confirmation.html?id=" + genRandonString(15);
       window.location.href = confirmationUrl;
@@ -459,5 +481,7 @@ function postRequest() {
 
     .catch(() => {
       alert("Error");
-    }); // catching errors
-}
+    }); 
+};
+
+//-----END of the cart.js page-----
