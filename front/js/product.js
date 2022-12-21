@@ -125,7 +125,7 @@ function addProductToCart() {
     //if the user entered the quantity and color of the selected product and 
     //if local storage already holds same product, the quantity will be updated 
     
-    //'if' statement check is cart is true(holds infromation) or false(ampty)
+    //'if' statement check if cart is true(holds infromation) or false(ampty)
     if (cartParse) {
 
       //if the cart holds information, the forEach function will iterate through all the objects 
