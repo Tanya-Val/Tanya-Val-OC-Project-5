@@ -120,7 +120,8 @@ function addProductToCart() {
    //'if' statement checks if the user indicated the quantity and color of the product to be added to the cart
   let push = true;
   if (productQuantity.value == 0 || productColor.value == undefined) {
-    console.log('add detales'); //add alert message
+    alert("Add product color and/or quantity");
+    //console.log('add detales'); 
   } else {
     //if the user entered the quantity and color of the selected product and 
     //if local storage already holds same product, the quantity will be updated 
