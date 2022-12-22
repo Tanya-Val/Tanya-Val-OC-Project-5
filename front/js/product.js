@@ -145,6 +145,7 @@ function addProductToCart() {
           //update local storage
           cart = localStorage.setItem('cart', JSON.stringify(cartParse));
           cartParse = JSON.parse(localStorage.getItem('cart'));
+          alert("You added a product to the cart!");
         };
       });
     };
@@ -157,6 +158,7 @@ function addProductToCart() {
       cart = JSON.stringify(cartParse);
       localStorage.setItem('cart', cart);
       cartParse = JSON.parse(cart);
+      alert("You added a product to the cart!");
     }
   };
 };
