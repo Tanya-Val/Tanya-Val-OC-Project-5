@@ -284,7 +284,7 @@ orderBnt.addEventListener('click', (event) => {
 });
 
 //Creating the contact object that will store data from the validation form
-let contactObj = {
+let contact = {
   firstName: firstName.value.trim(),
   lastName: lastName.value.trim(),
   address: address.value.trim(),
@@ -393,7 +393,7 @@ function contactObjInit() {
   if (validControl()) {
 
     //Updating the contact object with data from the form 
-    contactObj = {
+    contact = {
       firstName: firstName.value.trim(),
       lastName: lastName.value.trim(),
       address: address.value.trim(),
@@ -402,14 +402,14 @@ function contactObjInit() {
     }
 
     //Setting the contact object in local storage
-    localStorage.setItem('contactObj', JSON.stringify(contactObj));
+    localStorage.setItem('contactObj', JSON.stringify(contact));
     //console.log('check passed');
   };
 };
 
 
 //Declaring a variable that will store the list of products id from the local storage
-const productIdTable = [];
+const products = [];
 
 //Function pushes the list of products id from local storage to the 'productIdTable' array
 function productTable() {
@@ -421,7 +421,7 @@ function productTable() {
   for (product of cartParse) {
     
     //The id of the products is pushed to the 'productIdTable' array
-    productIdTable.push(product.id);
+    products.push(product.id);
   };
 
   //Uncomment the following line to print the array
@@ -429,17 +429,7 @@ function productTable() {
 };
 
 
-//Function that generates a random string that will serve as the order id
-//https://tecadmin.net/generate-random-string-in-javascript/
-function genRandonString(length) {
-  let chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*-_';
-  let charLength = chars.length;
-  let result = '';
-  for (let i = 0; i < length; i++) {
-    result += chars.charAt(Math.floor(Math.random() * charLength));
-  }
-  return result;
-}
+
 
 //Function that creates a product table that stores the ids of products and contact object,
 //send a post request to API to colect the product ID
@@ -449,20 +439,8 @@ function postRequest() {
   productTable();
   contactObjInit();
 
-  //Uncomment the following line to print contacts from the form and list of ids
-  //console.log(contactObj);
-  //console.log(productIdTable);
-
-  //Creating the object for the POST request 
-  const dataToPOST = {
-    productIdTable,
-    contactObj,
-  };
-//Uncomment the following line to print the object for POST request
-  console.log(dataToPOST);
-
-//Fetch method with POST request that will send to API 'dataToPost' object,
-//and generate the order id
+//Fetch method with POST request that will send to API 'products, contact' objects,
+//and extaract the orderId from backend 
   fetch("http://localhost:3000/api/products/order", {
       method: 'POST',
       headers: {
@@ -470,12 +448,13 @@ function postRequest() {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        dataToPOST
+        products,
+        contact,
       })
     })
     .then(response => response.json())
     .then((data) => {
-      let confirmationUrl = "./confirmation.html?id=" + genRandonString(15);
+      let confirmationUrl = "./confirmation.html?id=" + data.orderId;
       window.location.href = confirmationUrl;
     })
 
